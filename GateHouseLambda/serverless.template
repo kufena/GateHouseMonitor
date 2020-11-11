@@ -1,0 +1,41 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Transform": "AWS::Serverless-2016-10-31",
+  "Description": "An AWS Serverless Application for a blog API.",
+  "Resources": {
+    "Create": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "GateHouseLambda::Function.Post",
+        "Runtime": "dotnetcore3.1",
+        "CodeUri": "",
+        "MemorySize": 512,
+        "Timeout": 30,
+        "Role": null,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole",
+          "SecretsManagerReadWrite",
+          "AmazonRDSDataFullAccess",
+          "AmazonS3FullAccess"
+        ],
+        "Events": {
+          "RootGet": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/{type}",
+              "Method": "POST"
+            }
+          }
+        }
+      }  
+      }
+  },
+  "Outputs": {
+    "ApiURL": {
+      "Description": "API endpoint URL for Prod environment",
+      "Value": {
+        "Fn::Sub": "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+      }
+    }
+  }
+}
