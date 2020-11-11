@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GateHouseMonitor", "GateHou
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GateHouseLambda", "GateHouseLambda\GateHouseLambda.csproj", "{899F0AE1-49CB-4AD2-9C27-7F68E0C965A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GateHouseModel", "GateHouseModel\GateHouseModel.csproj", "{53ED7EF7-28C0-475F-95BC-02FAC11C55F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{899F0AE1-49CB-4AD2-9C27-7F68E0C965A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{899F0AE1-49CB-4AD2-9C27-7F68E0C965A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{899F0AE1-49CB-4AD2-9C27-7F68E0C965A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53ED7EF7-28C0-475F-95BC-02FAC11C55F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53ED7EF7-28C0-475F-95BC-02FAC11C55F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53ED7EF7-28C0-475F-95BC-02FAC11C55F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53ED7EF7-28C0-475F-95BC-02FAC11C55F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

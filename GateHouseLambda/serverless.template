@@ -6,7 +6,7 @@
     "Create": {
       "Type": "AWS::Serverless::Function",
       "Properties": {
-        "Handler": "GateHouseLambda::Function.Post",
+        "Handler": "GateHouseLambda::GateHouseLambda.Function::Post",
         "Runtime": "dotnetcore3.1",
         "CodeUri": "",
         "MemorySize": 512,
@@ -14,8 +14,6 @@
         "Role": null,
         "Policies": [
           "AWSLambdaBasicExecutionRole",
-          "SecretsManagerReadWrite",
-          "AmazonRDSDataFullAccess",
           "AmazonS3FullAccess"
         ],
         "Events": {
@@ -28,7 +26,7 @@
           }
         }
       }  
-      }
+    }
   },
   "Outputs": {
     "ApiURL": {
