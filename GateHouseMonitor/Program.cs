@@ -14,7 +14,7 @@ namespace GateHouseMonitor
     {
         public static async Task Main(string[] args)
         {
-            string url = args[1];
+            string url = args[0];
             //string apikey = "";
 
             Console.WriteLine("Gate House Monitor Starting.");
