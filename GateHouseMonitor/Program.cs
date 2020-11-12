@@ -14,10 +14,12 @@ namespace GateHouseMonitor
     {
         public static async Task Main(string[] args)
         {
-            string url = "XXXX";
+            string url = args[1];
             //string apikey = "";
 
             Console.WriteLine("Gate House Monitor Starting.");
+            Console.WriteLine($"Using API URI of {url}");
+
             Stopwatch sp = new Stopwatch();
             sp.Start();
             while(true)
