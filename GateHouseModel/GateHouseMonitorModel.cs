@@ -6,16 +6,13 @@ namespace GateHouseModel
 {
     public class GateHouseMonitorModel
     {
-        bool ok;
-        DateTime time;
-
         public GateHouseMonitorModel() { }
         public GateHouseMonitorModel(bool b, DateTime t)
         {
-            this.ok = b;
-            this.time = t;
+            this.OK = b;
+            this.Time = t;
         }
-        public bool OK { get => ok; set => ok = value; }
-        public DateTime Time { get => time; set => time = value; }
+        public bool OK { get; set; }
+        public DateTime Time { get; set; }
     }
 }

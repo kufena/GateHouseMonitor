@@ -14,8 +14,8 @@ namespace GateHouseMonitor
     {
         public static async Task Main(string[] args)
         {
-            string url = "";
-            string apikey = "";
+            string url = "XXXX";
+            //string apikey = "";
 
             Console.WriteLine("Gate House Monitor Starting.");
             Stopwatch sp = new Stopwatch();
@@ -36,8 +36,6 @@ namespace GateHouseMonitor
                     Method = HttpMethod.Post,
                     Content = JsonContent.Create<GateHouseMonitorModel>(model)
                 };
-                if (!msg.Headers.TryAddWithoutValidation("x-api-key", apikey))
-                    Console.WriteLine("Can't add api key header.");
 
                 HttpClient client = new HttpClient();
                 client.Timeout = new TimeSpan(0, 0, 2);

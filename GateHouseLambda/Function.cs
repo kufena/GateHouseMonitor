@@ -39,10 +39,15 @@ namespace GateHouseLambda
         {
 
             string type = request.PathParameters["type"];
+            Console.WriteLine($"type == {type}");
+            Console.WriteLine($"path == {request.Path}");
+            JsonSerializerOptions jsonopt = new JsonSerializerOptions();
+            jsonopt.PropertyNameCaseInsensitive = true;
+
             if (String.Equals(type,"GateHouseMonitor"))
             {
                 Console.WriteLine("Got a nice gate house monitor request.");
-                var model = JsonSerializer.Deserialize<GateHouseMonitorModel>(request.Body);
+                var model = JsonSerializer.Deserialize<GateHouseMonitorModel>(request.Body, jsonopt );
                 Console.WriteLine($"Got ok = {model.OK} and time/date of {model.Time.ToShortTimeString()}-{model.Time.ToShortDateString()}");
 
                 string dtformat = model.Time.ToString("yyyy-M-d-HH-mm-ss");
@@ -50,7 +55,7 @@ namespace GateHouseLambda
 
                 var resp = await s3Client.PutObjectAsync(new Amazon.S3.Model.PutObjectRequest
                                 {
-                                    BucketName = "AAAAAAA",
+                                    BucketName = "XXXX",
                                     ContentBody = request.Body,
                                     Key = $"GateHouseMonitor-{dtformat}"
                                 });
