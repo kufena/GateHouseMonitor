@@ -40,7 +40,7 @@ namespace GateHouseMonitor
                 };
 
                 HttpClient client = new HttpClient();
-                client.Timeout = new TimeSpan(0, 0, 2);
+                client.Timeout = new TimeSpan(0, 0, 30);
                 var response = await client.SendAsync(msg);
                 Console.WriteLine($"Here we go! {amcrestIp.Length} - {sp.Elapsed} - {response.StatusCode}");
                 Thread.Sleep(15 * 1 * 1000);
