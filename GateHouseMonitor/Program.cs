@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using GateHouseModel;
 using System.Threading.Tasks;
+using System.Device.Gpio;
+using System.Device.I2c;
 
 namespace GateHouseMonitor
 {
@@ -24,6 +26,7 @@ namespace GateHouseMonitor
             sp.Start();
             while(true)
             {
+                
                 var dt = DateTime.Now;
                 var amcrestIp = Dns.GetHostAddresses("amcrestcloud.com");
                 var model = new GateHouseMonitorModel
