@@ -17,6 +17,7 @@ namespace GateHouseMonitor
         public static async Task Main(string[] args)
         {
             string url = args[0];
+            int sz = Int32.Parse(args[1]);
 
             Console.WriteLine("Gate House Monitor Starting.");
             Console.WriteLine($"Using API URI of {url}");
@@ -36,11 +37,11 @@ namespace GateHouseMonitor
                     Time = dt
                 };
 
-                byte[] buffer = new byte[16];
+                byte[] buffer = new byte[sz];
                 device.read(buffer);
 
                 string s = "buffer::";
-                for (int i = 0; i < 16; i++)
+                for (int i = 0; i < sz; i++)
                     s += " " + ((uint)buffer[i]);
                 Console.WriteLine(s);
                 //HttpResponseMessage response = await sendData(url, model);
