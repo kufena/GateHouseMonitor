@@ -18,12 +18,14 @@ namespace GateHouseMonitor
         {
             string url = args[0];
             int sz = Int32.Parse(args[1]);
+            int busid = Int32.Parse(args[2]);
+            int addr = Int32.Parse(args[3]);
 
             Console.WriteLine("Gate House Monitor Starting.");
             Console.WriteLine($"Using API URI of {url}");
 
             Stopwatch sp = new Stopwatch();
-            MP9808I2CDevice device = new MP9808I2CDevice();
+            MP9808I2CDevice device = new MP9808I2CDevice(busid, addr);
 
             sp.Start();
             while(true)
