@@ -20,6 +20,7 @@ namespace GateHouseMonitor
 
         public void read(byte[] buffer)
         {
+            device.WriteByte((byte)0x05);
             device.Read(buffer.AsSpan<byte>());
             buffer[buffer.Length - 1] = device.ReadByte();
 
