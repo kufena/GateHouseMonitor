@@ -33,19 +33,17 @@ namespace GateHouseMonitor
 
                 var dt = DateTime.Now;
                 var amcrestIp = Dns.GetHostAddresses("amcrestcloud.com");
+                byte[] buffer = new byte[sz];
+                float temp = device.read(buffer);
+                Console.WriteLine($"Temperature = {temp}");
+
                 var model = new GateHouseMonitorModel
                 {
                     OK = (amcrestIp.Length > 0),
-                    Time = dt
+                    Time = dt,
+                    Temperature = temp
                 };
 
-                byte[] buffer = new byte[sz];
-                device.read(buffer);
-
-                string s = "buffer::";
-                for (int i = 0; i < sz; i++)
-                    s += " " + ((uint)buffer[i]);
-                Console.WriteLine(s);
                 //HttpResponseMessage response = await sendData(url, model);
                 //Console.WriteLine($"Here we go! {amcrestIp.Length} - {sp.Elapsed} - {response.StatusCode}");
                 Thread.Sleep(15 * 1 * 1000);
