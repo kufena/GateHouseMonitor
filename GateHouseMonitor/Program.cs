@@ -17,16 +17,17 @@ namespace GateHouseMonitor
         public static async Task Main(string[] args)
         {
             string url = args[0];
-            //string apikey = "";
 
             Console.WriteLine("Gate House Monitor Starting.");
             Console.WriteLine($"Using API URI of {url}");
 
             Stopwatch sp = new Stopwatch();
+            MP9808I2CDevice device = new MP9808I2CDevice();
+
             sp.Start();
             while(true)
             {
-                
+
                 var dt = DateTime.Now;
                 var amcrestIp = Dns.GetHostAddresses("amcrestcloud.com");
                 var model = new GateHouseMonitorModel
@@ -35,20 +36,33 @@ namespace GateHouseMonitor
                     Time = dt
                 };
 
-                HttpRequestMessage msg = new HttpRequestMessage
-                {
-                    RequestUri = new Uri(url),
-                    Method = HttpMethod.Post,
-                    Content = JsonContent.Create<GateHouseMonitorModel>(model)
-                };
+                byte[] buffer = new byte[16];
+                device.read(buffer);
 
-                HttpClient client = new HttpClient();
-                client.Timeout = new TimeSpan(0, 0, 30);
-                var response = await client.SendAsync(msg);
-                Console.WriteLine($"Here we go! {amcrestIp.Length} - {sp.Elapsed} - {response.StatusCode}");
+                string s = "buffer::";
+                for (int i = 0; i < 16; i++)
+                    s += " " + ((uint)buffer[i]);
+                Console.WriteLine(s);
+                //HttpResponseMessage response = await sendData(url, model);
+                //Console.WriteLine($"Here we go! {amcrestIp.Length} - {sp.Elapsed} - {response.StatusCode}");
                 Thread.Sleep(15 * 1 * 1000);
 
             }
+        }
+
+        private static async Task<HttpResponseMessage> sendData(string url, GateHouseMonitorModel model)
+        {
+            HttpRequestMessage msg = new HttpRequestMessage
+            {
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Post,
+                Content = JsonContent.Create<GateHouseMonitorModel>(model)
+            };
+
+            HttpClient client = new HttpClient();
+            client.Timeout = new TimeSpan(0, 0, 30);
+            var response = await client.SendAsync(msg);
+            return response;
         }
     }
 }
