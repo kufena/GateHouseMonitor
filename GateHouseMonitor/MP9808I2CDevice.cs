@@ -23,8 +23,6 @@ namespace GateHouseMonitor
             device.WriteByte((byte)0x05);
             //device.Read(buffer.AsSpan<byte>());
             buffer[0] = device.ReadByte();
-            device.WriteByte((byte)0x05);
-            //device.Read(buffer.AsSpan<byte>());
             buffer[1] = device.ReadByte();
 
         }
