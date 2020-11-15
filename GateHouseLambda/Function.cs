@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.S3;
+using Amazon.SimpleSystemsManagement;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using GateHouseModel;
+using Amazon.SimpleSystemsManagement.Model;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -18,10 +20,12 @@ namespace GateHouseLambda
     public class Function
     {
         AmazonS3Client s3Client;
+        AmazonSimpleSystemsManagementClient ssmClient;
 
         public Function()
         {
             s3Client = new AmazonS3Client();
+            ssmClient = new AmazonSimpleSystemsManagementClient();
         }
 
         public Function(AmazonS3Client cl)
@@ -37,6 +41,15 @@ namespace GateHouseLambda
         /// <returns>Http response.</returns>
         public async Task<APIGatewayProxyResponse> Post(APIGatewayProxyRequest request, ILambdaContext context)
         {
+            // This parameter store stuff is happening here because it is async and
+            // cannot be done in the c'tor.  Lambda needs an initialise section?
+            GetParameterRequest ssmRequest = new GetParameterRequest
+            {
+                Name = "thegatehousewereham-s3monitorbucket"
+            };
+
+            var ssmResponse = await ssmClient.GetParameterAsync(ssmRequest);
+            string bucketName = ssmResponse.Parameter.Value;
 
             string type = request.PathParameters["type"];
             Console.WriteLine($"type == {type}");
@@ -55,7 +68,7 @@ namespace GateHouseLambda
 
                 var resp = await s3Client.PutObjectAsync(new Amazon.S3.Model.PutObjectRequest
                                 {
-                                    BucketName = "XXXX",
+                                    BucketName = bucketName,
                                     ContentBody = request.Body,
                                     Key = $"GateHouseMonitor-{dtformat}"
                                 });

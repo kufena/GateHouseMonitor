@@ -14,7 +14,16 @@
         "Role": null,
         "Policies": [
           "AWSLambdaBasicExecutionRole",
-          "AmazonS3FullAccess"
+          "AmazonS3FullAccess",
+          {
+            "Statement": [
+               {
+                 "Effect": "Allow",
+                 "Action": "ssm:GetParameter*",
+                 "Resource": "*"
+               }
+            ]
+          }
         ],
         "Events": {
           "RootGet": {
