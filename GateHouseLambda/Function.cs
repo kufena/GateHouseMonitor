@@ -21,6 +21,7 @@ namespace GateHouseLambda
     {
         AmazonS3Client s3Client;
         AmazonSimpleSystemsManagementClient ssmClient;
+        string bucketName = null;
 
         public Function()
         {
@@ -41,15 +42,7 @@ namespace GateHouseLambda
         /// <returns>Http response.</returns>
         public async Task<APIGatewayProxyResponse> Post(APIGatewayProxyRequest request, ILambdaContext context)
         {
-            // This parameter store stuff is happening here because it is async and
-            // cannot be done in the c'tor.  Lambda needs an initialise section?
-            GetParameterRequest ssmRequest = new GetParameterRequest
-            {
-                Name = "thegatehousewereham-s3monitorbucket"
-            };
-
-            var ssmResponse = await ssmClient.GetParameterAsync(ssmRequest);
-            string bucketName = ssmResponse.Parameter.Value;
+            await getBucketName();
 
             string type = request.PathParameters["type"];
             Console.WriteLine($"type == {type}");
@@ -57,21 +50,21 @@ namespace GateHouseLambda
             JsonSerializerOptions jsonopt = new JsonSerializerOptions();
             jsonopt.PropertyNameCaseInsensitive = true;
 
-            if (String.Equals(type,"GateHouseMonitor"))
+            if (String.Equals(type, "GateHouseMonitor"))
             {
                 Console.WriteLine("Got a nice gate house monitor request.");
-                var model = JsonSerializer.Deserialize<GateHouseMonitorModel>(request.Body, jsonopt );
+                var model = JsonSerializer.Deserialize<GateHouseMonitorModel>(request.Body, jsonopt);
                 Console.WriteLine($"Got ok = {model.OK} and time/date of {model.Time.ToShortTimeString()}-{model.Time.ToShortDateString()}");
 
                 string dtformat = model.Time.ToString("yyyy-M-d-HH-mm-ss");
                 Console.WriteLine("Here's the format --" + dtformat + "--");
 
                 var resp = await s3Client.PutObjectAsync(new Amazon.S3.Model.PutObjectRequest
-                                {
-                                    BucketName = bucketName,
-                                    ContentBody = request.Body,
-                                    Key = $"GateHouseMonitor-{dtformat}"
-                                });
+                {
+                    BucketName = bucketName,
+                    ContentBody = request.Body,
+                    Key = $"GateHouseMonitor-{dtformat}"
+                });
                 Console.WriteLine("Our response was " + resp.HttpStatusCode);
                 if (resp.HttpStatusCode != HttpStatusCode.OK)
                     return new APIGatewayProxyResponse
@@ -82,8 +75,29 @@ namespace GateHouseLambda
             }
             return new APIGatewayProxyResponse
             {
-                StatusCode = (int) HttpStatusCode.OK
+                StatusCode = (int)HttpStatusCode.OK
             };
+        }
+
+        private async Task getBucketName()
+        {
+            if (bucketName is null)
+            {
+                Console.WriteLine("Fetching bucket name from parameter store.");
+                // This parameter store stuff is happening here because it is async and
+                // cannot be done in the c'tor.  Lambda needs an initialise section?
+                GetParameterRequest ssmRequest = new GetParameterRequest
+                {
+                    Name = "thegatehousewereham-s3monitorbucket"
+                };
+
+                var ssmResponse = await ssmClient.GetParameterAsync(ssmRequest);
+                bucketName = ssmResponse.Parameter.Value;
+            }
+            else
+            {
+                Console.WriteLine("No need to get bucket name as it isn't null.");
+            }
         }
     }
 }
