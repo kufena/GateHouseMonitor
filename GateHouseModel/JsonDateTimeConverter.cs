@@ -14,13 +14,13 @@ namespace GateHouseModel
             Type typeToConvert,
             JsonSerializerOptions options) =>
                 DateTime.ParseExact(reader.GetString(),
-                    "MM/dd/yyyyTHH:mm:ss", CultureInfo.InvariantCulture);
+                    "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
         public override void Write(
             Utf8JsonWriter writer,
             DateTime dateTimeValue,
             JsonSerializerOptions options) =>
                 writer.WriteStringValue(dateTimeValue.ToString(
-                    "MM/dd/yyyyTHH:mm:ss", CultureInfo.InvariantCulture));
+                    "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
     }
 }
