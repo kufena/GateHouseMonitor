@@ -77,11 +77,13 @@ namespace GateHouseMonitor
 
         private static async Task<HttpResponseMessage> sendData(string url, GateHouseMonitorModel model)
         {
+            JsonSerializerOptions opts = new JsonSerializerOptions();
+            opts.Converters.Add(new JsonDateTimeConverter());
             HttpRequestMessage msg = new HttpRequestMessage
             {
                 RequestUri = new Uri(url),
                 Method = HttpMethod.Post,
-                Content = JsonContent.Create<GateHouseMonitorModel>(model)
+                Content = JsonContent.Create<GateHouseMonitorModel>(model, options: opts)
             };
 
             HttpClient client = new HttpClient();
