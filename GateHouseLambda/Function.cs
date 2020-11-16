@@ -49,7 +49,7 @@ namespace GateHouseLambda
             Console.WriteLine($"path == {request.Path}");
             JsonSerializerOptions jsonopt = new JsonSerializerOptions();
             jsonopt.PropertyNameCaseInsensitive = true;
-
+            jsonopt.Converters.Add(new JsonDateTimeConverter());
             if (String.Equals(type, "GateHouseMonitor"))
             {
                 Console.WriteLine("Got a nice gate house monitor request.");
