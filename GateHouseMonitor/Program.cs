@@ -9,6 +9,7 @@ using GateHouseModel;
 using System.Threading.Tasks;
 using System.Device.Gpio;
 using System.Device.I2c;
+using System.Text.Json;
 
 namespace GateHouseMonitor
 {
@@ -59,7 +60,7 @@ namespace GateHouseMonitor
                 var model = new GateHouseMonitorModel
                 {
                     OK = (amcrestIp.Length > 0),
-                    Time = dt,
+                    Time = dt.ToLocalTime(),
                     Temperature = temp
                 };
 
