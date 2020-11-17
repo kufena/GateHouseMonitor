@@ -44,6 +44,12 @@ namespace GateHouseLambda
         {
             await getBucketName();
 
+            string ip = "";
+            if (request.Headers.TryGetValue("X-Forwarded-For", out ip))
+            {
+                Console.WriteLine($"Ip address of caller is {ip}");
+            }
+
             string type = request.PathParameters["type"];
             Console.WriteLine($"type == {type}");
             Console.WriteLine($"path == {request.Path}");
@@ -59,12 +65,21 @@ namespace GateHouseLambda
                 string dtformat = model.Time.ToString("yyyy-M-d-HH-mm-ss");
                 Console.WriteLine("Here's the format --" + dtformat + "--");
 
+                MonitorJson mj = new MonitorJson
+                {
+                    IP = ip,
+                    Temperature = model.Temperature,
+                    OK = model.OK,
+                    Time = model.Time
+                };
+
                 var resp = await s3Client.PutObjectAsync(new Amazon.S3.Model.PutObjectRequest
                 {
                     BucketName = bucketName,
-                    ContentBody = request.Body,
+                    ContentBody = JsonSerializer.Serialize<MonitorJson>(mj, jsonopt),
                     Key = $"GateHouseMonitor-{dtformat}"
                 });
+
                 Console.WriteLine("Our response was " + resp.HttpStatusCode);
                 if (resp.HttpStatusCode != HttpStatusCode.OK)
                     return new APIGatewayProxyResponse
