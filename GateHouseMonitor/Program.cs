@@ -85,7 +85,7 @@ namespace GateHouseMonitor
                 Method = HttpMethod.Post,
                 Content = JsonContent.Create<GateHouseMonitorModel>(model, options: opts)
             };
-
+            
             HttpClient client = new HttpClient();
             client.Timeout = new TimeSpan(0, 0, 30);
             var response = await client.SendAsync(msg);

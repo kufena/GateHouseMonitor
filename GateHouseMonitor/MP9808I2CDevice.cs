@@ -32,8 +32,7 @@ namespace GateHouseMonitor
      * look, but my device is newer than the document and things may have changed, I don't know.
      */
     class MP9808I2CDevice
-    {
-        
+    {        
         I2cDevice device;
 
         // Default values on my Pi.

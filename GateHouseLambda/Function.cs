@@ -64,7 +64,7 @@ namespace GateHouseLambda
 
                 string dtformat = model.Time.ToString("yyyy-M-d-HH-mm-ss");
                 Console.WriteLine("Here's the format --" + dtformat + "--");
-
+                
                 MonitorJson mj = new MonitorJson
                 {
                     IP = ip,
