@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export CHECK_DOMAIN=amcrestcloud.com
-export CHECK_TELEPHONE=07515359541
+export CHECK_DOMAIN=XXXXX
+export CHECK_TELEPHONE=XXXXX
 
 cd /root
 python3 checkinternet.py
