@@ -23,10 +23,15 @@ An AWS Lambda behind an API gateway.  Use a POST to send a JSON object containin
 At the moment, it requires a {type} parameter, and the only one it responds to is GateHouseMonitor.
 Uses SAM/Cloudformation to deploy.
 
+## python
+
+This is a little bit of cron job python that does much the same as the monitor - checks a domain
+name (no temperature stuff) but it then simply logs a status to a file.  The clever bit is that
+should the status change, ok to bad, or bad to ok, it will send an SMS to a number given via
+an environment variable, using AT commands to the FONA 3G device.
+
 ## To Come
 
 - I hope to extend the lambda to take a different set of data from a things network application.
-
-- I'd like to add a FONA 3G GSM module so that, should the internet go down completely.
 
 - Add logic to call the 'reset' on the router should the internet go down.
