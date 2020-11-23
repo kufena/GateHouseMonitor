@@ -14,5 +14,6 @@ namespace GateHouseLambda
         public float Temperature { get; set; }
         public string CallerIP { get; set; }
         public IPAddress[] DomainIP { get; set; }
+        public string Domain { get; set; }
     }
 }

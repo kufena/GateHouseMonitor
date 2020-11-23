@@ -73,7 +73,8 @@ namespace GateHouseLambda
                     Temperature = model.Temperature,
                     OK = model.OK,
                     Time = model.Time,
-                    DomainIP = model.IPs
+                    DomainIP = model.IPs,
+                    Domain = model.Domain
                 };
 
                 var resp = await s3Client.PutObjectAsync(new Amazon.S3.Model.PutObjectRequest

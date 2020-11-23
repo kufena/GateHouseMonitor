@@ -69,7 +69,8 @@ namespace GateHouseMonitor
                 OK = success && (domainIPs.Length > 0),
                 Time = dt.ToLocalTime(),
                 Temperature = temp,
-                IPs = domainIPs
+                IPs = domainIPs,
+                Domain = domain
             };
 
             HttpResponseMessage response = await sendData(url, model);
