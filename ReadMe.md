@@ -17,6 +17,8 @@ Pete Gallagher has a write up of how to install it here:
 
   https://www.petecodes.co.uk/install-and-use-microsoft-dot-net-5-with-the-raspberry-pi/
 
+The intention, now, is to run this using cron every fifteen minutes or so.
+
 ## GateHouseLambda
 
 An AWS Lambda behind an API gateway.  Use a POST to send a JSON object containing the model.
