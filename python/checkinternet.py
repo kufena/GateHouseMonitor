@@ -4,6 +4,7 @@ import dns
 import dns.resolver
 import json
 import unicodedata
+from datetime import datetime
 
 #unicodedata.normalize('NFKD', title).encode('ascii', 'ignore')
 #READ THE DOMAIN AND TELEPHONE NUMBER FROM THE ENVIRONMENT.
@@ -68,16 +69,21 @@ if (error or len(ips) == 0):
     print("No ips found")
     sendSMS(bytes(telephone), b'Failed SMS lookup, but we are still running.')
   lock['status'] = "bad"
+  lock['ips'] = []
 else:
   # WE WIN!  BUT IF THIS IS A CHANGE OF STATUS THEN SEND A TEXT
   if (lock['status'] == "bad"):
     sendSMS(bytes(telephone), b'SMS lookup on pi worked ok, so we are back baby!')
   lock['status'] = "ok"
+  lock['ips'] = []
   for ipval in ips:
-    print(ipval.to_text())
-    
+    ipvaltext = ipval.to_text()
+    print(ipvaltext
+    lock['ips'].append(ipvaltext)
+
 # UPDATE NUMBER OF GOES WE'VE DONE
 lock['count'] = lock['count'] + 1
+lock['timestamp'] = datetime.now()
 
 # WRITE THE STATUS DATA.
 f = open("/root/var/checkinternet/lock",'w');
