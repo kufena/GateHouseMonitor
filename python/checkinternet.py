@@ -75,12 +75,13 @@ else:
   if (lock['status'] == "bad"):
     sendSMS(bytes(telephone), b'SMS lookup on pi worked ok, so we are back baby!')
   lock['status'] = "ok"
-  lock['ips'] = []
+  iplist = []
   for ipval in ips:
     ipvaltext = ipval.to_text()
     print(ipvaltext
-    lock['ips'].append(ipvaltext)
-
+    iplist.append(ipvaltext)
+  lock['ips'] = iplist
+  
 # UPDATE NUMBER OF GOES WE'VE DONE
 lock['count'] = lock['count'] + 1
 lock['timestamp'] = datetime.now()
