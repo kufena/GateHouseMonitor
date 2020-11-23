@@ -18,7 +18,7 @@ namespace GateHouseMonitor
         /**
          * arguments:
          *   URL of Lambda: compulsory
-         *   Period in minutes
+         *   Domain: compulsory
          *   Bus id
          *   Address
          *   
@@ -27,13 +27,10 @@ namespace GateHouseMonitor
         public static async Task Main(string[] args)
         {
             string url = args[0];
+            string domain = args[1];
             int busid = 1;
             int addr = 0x18;
-            int period = 15 * 60 * 1000;
             bool success = true;
-
-            if (args.Length > 1)
-                period = Int32.Parse(args[1]) * 60 * 1000;
 
             if (args.Length > 2)
             {
@@ -43,22 +40,24 @@ namespace GateHouseMonitor
 
             Console.WriteLine("Gate House Monitor Starting.");
             Console.WriteLine($"Using API URI of {url}");
-            Console.WriteLine($"Checking device on bus {busid} and address {addr} every {period} milliseconds.");
+            Console.WriteLine($"Checking device on bus {busid} and address {addr}.");
+            Console.WriteLine($"Checking domain {domain}");
+
             Stopwatch sp = new Stopwatch();
-            MP9808I2CDevice device = new MP9808I2CDevice(busid, addr);
+            var device = new MP9808I2CDevice(busid, addr);
             
             sp.Start();
 
             var dt = DateTime.Now;
-            IPAddress[] amcrestIp;
+            IPAddress[] domainIPs;
             try
             {
-                amcrestIp = Dns.GetHostAddresses("amcrestcloud.com");
+                domainIPs = Dns.GetHostAddresses(domain);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                amcrestIp = new IPAddress[] { };
+                domainIPs = new IPAddress[] { };
                 success = false;
             }
 
@@ -67,14 +66,14 @@ namespace GateHouseMonitor
 
             var model = new GateHouseMonitorModel
             {
-                OK = success && (amcrestIp.Length > 0),
+                OK = success && (domainIPs.Length > 0),
                 Time = dt.ToLocalTime(),
                 Temperature = temp,
-                IPs = amcrestIp
+                IPs = domainIPs
             };
 
             HttpResponseMessage response = await sendData(url, model);
-            Console.WriteLine($"Here we go! {amcrestIp.Length} - {sp.Elapsed} - {response.StatusCode}");
+            Console.WriteLine($"Here we go! {domainIPs.Length} - {sp.Elapsed} - {response.StatusCode}");
 
         }
 
