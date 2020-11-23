@@ -48,7 +48,7 @@ def sendSMS(telnum, txt):
   ser.close()
 
 def myconverter(o):
-    if isinstance(o, datetime.datetime):
+    if isinstance(o, datetime):
         return o.__str__()
 
 # OPEN AND READ THE JSON STATUS INFORMATION FROM THE LAST GO ROUND
