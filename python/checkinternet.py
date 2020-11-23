@@ -47,6 +47,10 @@ def sendSMS(telnum, txt):
 
   ser.close()
 
+def myconverter(o):
+    if isinstance(o, datetime.datetime):
+        return o.__str__()
+
 # OPEN AND READ THE JSON STATUS INFORMATION FROM THE LAST GO ROUND
 f = open("/root/var/checkinternet/lock",'r');
 lock = json.load(f)
@@ -88,5 +92,5 @@ lock['timestamp'] = datetime.now()
 
 # WRITE THE STATUS DATA.
 f = open("/root/var/checkinternet/lock",'w');
-json.dump(lock, f)
+json.dump(lock, f, default=myconverter)
 f.close()
