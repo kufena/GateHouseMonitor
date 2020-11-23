@@ -45,7 +45,7 @@ namespace GateHouseMonitor
             Console.WriteLine($"Using API URI of {url}");
             Console.WriteLine($"Checking device on bus {busid} and address {addr} every {period} milliseconds.");
             Stopwatch sp = new Stopwatch();
-            //MP9808I2CDevice device = new MP9808I2CDevice(busid, addr);
+            MP9808I2CDevice device = new MP9808I2CDevice(busid, addr);
             
             sp.Start();
 
@@ -62,7 +62,7 @@ namespace GateHouseMonitor
                 success = false;
             }
 
-            float temp = 0f; // device.read();
+            float temp = device.read();
             Console.WriteLine($"Temperature = {temp}");
 
             var model = new GateHouseMonitorModel
