@@ -30,7 +30,8 @@ namespace GateHouseMonitor
             int busid = 1;
             int addr = 0x18;
             int period = 15 * 60 * 1000;
-            
+            bool success = true;
+
             if (args.Length > 1)
                 period = Int32.Parse(args[1]) * 60 * 1000;
 
@@ -44,41 +45,44 @@ namespace GateHouseMonitor
             Console.WriteLine($"Using API URI of {url}");
             Console.WriteLine($"Checking device on bus {busid} and address {addr} every {period} milliseconds.");
             Stopwatch sp = new Stopwatch();
-            MP9808I2CDevice device = new MP9808I2CDevice(busid, addr);
-            Stopwatch workt = new Stopwatch();
-
+            //MP9808I2CDevice device = new MP9808I2CDevice(busid, addr);
+            
             sp.Start();
-            while(true)
+
+            var dt = DateTime.Now;
+            IPAddress[] amcrestIp;
+            try
             {
-                workt.Reset();
-                workt.Start();
-                var dt = DateTime.Now;
-                var amcrestIp = Dns.GetHostAddresses("amcrestcloud.com");
-                float temp = device.read();
-                Console.WriteLine($"Temperature = {temp}");
-
-                var model = new GateHouseMonitorModel
-                {
-                    OK = (amcrestIp.Length > 0),
-                    Time = dt.ToLocalTime(),
-                    Temperature = temp
-                };
-
-                HttpResponseMessage response = await sendData(url, model);
-                Console.WriteLine($"Here we go! {amcrestIp.Length} - {sp.Elapsed} - {response.StatusCode}");
-
-                workt.Stop();
-
-                // To get periodicity right we time the work and take it off.
-                Thread.Sleep(period - (int)workt.ElapsedMilliseconds);
-
+                amcrestIp = Dns.GetHostAddresses("amcrestcloud.com");
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                amcrestIp = new IPAddress[] { };
+                success = false;
+            }
+
+            float temp = 0f; // device.read();
+            Console.WriteLine($"Temperature = {temp}");
+
+            var model = new GateHouseMonitorModel
+            {
+                OK = success && (amcrestIp.Length > 0),
+                Time = dt.ToLocalTime(),
+                Temperature = temp,
+                IPs = amcrestIp
+            };
+
+            HttpResponseMessage response = await sendData(url, model);
+            Console.WriteLine($"Here we go! {amcrestIp.Length} - {sp.Elapsed} - {response.StatusCode}");
+
         }
 
         private static async Task<HttpResponseMessage> sendData(string url, GateHouseMonitorModel model)
         {
             JsonSerializerOptions opts = new JsonSerializerOptions();
             opts.Converters.Add(new JsonDateTimeConverter());
+            opts.Converters.Add(new JsonIPAddressConverter());
             HttpRequestMessage msg = new HttpRequestMessage
             {
                 RequestUri = new Uri(url),

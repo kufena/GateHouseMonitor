@@ -56,6 +56,8 @@ namespace GateHouseLambda
             JsonSerializerOptions jsonopt = new JsonSerializerOptions();
             jsonopt.PropertyNameCaseInsensitive = true;
             jsonopt.Converters.Add(new JsonDateTimeConverter());
+            jsonopt.Converters.Add(new JsonIPAddressConverter());
+
             if (String.Equals(type, "GateHouseMonitor"))
             {
                 Console.WriteLine("Got a nice gate house monitor request.");
@@ -67,10 +69,11 @@ namespace GateHouseLambda
                 
                 MonitorJson mj = new MonitorJson
                 {
-                    IP = ip,
+                    CallerIP = ip,
                     Temperature = model.Temperature,
                     OK = model.OK,
-                    Time = model.Time
+                    Time = model.Time,
+                    DomainIP = model.IPs
                 };
 
                 var resp = await s3Client.PutObjectAsync(new Amazon.S3.Model.PutObjectRequest
