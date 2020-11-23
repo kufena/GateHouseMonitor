@@ -78,10 +78,10 @@ else:
   iplist = []
   for ipval in ips:
     ipvaltext = ipval.to_text()
-    print(ipvaltext
+    print(ipvaltext)
     iplist.append(ipvaltext)
   lock['ips'] = iplist
-  
+
 # UPDATE NUMBER OF GOES WE'VE DONE
 lock['count'] = lock['count'] + 1
 lock['timestamp'] = datetime.now()
