@@ -92,6 +92,44 @@ namespace GateHouseLambda
                         Body = resp.ToString()
                     };
             }
+
+            if (String.Equals(type, "TTNMonitor"))
+            {
+                Console.WriteLine("Got a nice TTN monitor request.");
+                Console.WriteLine(request.Body);
+                
+                var model = JsonSerializer.Deserialize<TTNModel>(request.Body, jsonopt);
+
+                Console.WriteLine($"Temperature = {model.payload_fields.temperature}");
+                Console.WriteLine($"Metadata = {model.metadata}");
+                /*
+                MonitorJson mj = new MonitorJson
+                {
+                    CallerIP = ip,
+                    Temperature = model.Temperature,
+                    OK = model.OK,
+                    Time = model.Time,
+                    DomainIP = model.IPs,
+                    Domain = model.Domain
+                };
+
+                var resp = await s3Client.PutObjectAsync(new Amazon.S3.Model.PutObjectRequest
+                {
+                    BucketName = bucketName,
+                    ContentBody = JsonSerializer.Serialize<MonitorJson>(mj, jsonopt),
+                    Key = $"GateHouseMonitor-{dtformat}"
+                });
+
+                Console.WriteLine("Our response was " + resp.HttpStatusCode);
+                if (resp.HttpStatusCode != HttpStatusCode.OK)
+                    return new APIGatewayProxyResponse
+                    {
+                        StatusCode = (int)HttpStatusCode.BadRequest,
+                        Body = resp.ToString()
+                    };
+                */
+            }
+
             return new APIGatewayProxyResponse
             {
                 StatusCode = (int)HttpStatusCode.OK
