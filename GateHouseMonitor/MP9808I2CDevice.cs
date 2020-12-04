@@ -50,50 +50,58 @@ namespace GateHouseMonitor
          */
         public float read()
         {
-            byte[] buffer = new byte[2];
-
-            // Write the register number we want to read.
-            device.WriteByte((byte)0x05);
-            // Read the bytes.
-            device.Read(buffer.AsSpan<byte>());
-
-            // 0 is upper byte, 1 is lower byte here.
-            // The values I get back are ok-ish, but I get the status bits set.
-            if ((buffer[0] & 0x80) == 0x80)
+            try
             {
-                // T_A > T_CRIT
-                Console.WriteLine("Numero 1");
-            }
+                byte[] buffer = new byte[2];
 
-            if ((buffer[0] & 0x40) == 0x40)
+                // Write the register number we want to read.
+                device.WriteByte((byte)0x05);
+                // Read the bytes.
+                device.Read(buffer.AsSpan<byte>());
+
+                // 0 is upper byte, 1 is lower byte here.
+                // The values I get back are ok-ish, but I get the status bits set.
+                if ((buffer[0] & 0x80) == 0x80)
+                {
+                    // T_A > T_CRIT
+                    Console.WriteLine("Numero 1");
+                }
+
+                if ((buffer[0] & 0x40) == 0x40)
+                {
+                    // T_A > T_UPPER
+                    Console.WriteLine("Numero 2");
+                }
+
+                if ((buffer[0] & 0x20) == 0x20)
+                {
+                    // T_A < T_LOWER
+                    Console.WriteLine("Numero 3");
+                }
+
+                // The calculation for the temperature is taken from the 25095A.pdf document linked
+                // to in the above class comment.
+                float temperature = 0.0f;
+
+                byte upperv = (byte)(buffer[0] & 0x1F); // Clear flag bits.
+
+                if ((upperv & 0x10) == 0x10)
+                { // Check sign
+                  // Negative
+                    upperv = (byte)(upperv & 0x0F);
+                    temperature = 256.0f - ((float)upperv * 16f + ((float)buffer[1] / 16f));
+                }
+                else
+                {
+                    // Positive
+                    temperature = (float)upperv * 16f + ((float)buffer[1] / 16f);
+                }
+                return temperature;
+            } catch (Exception ex)
             {
-                // T_A > T_UPPER
-                Console.WriteLine("Numero 2");
+                Console.WriteLine(ex);
+                return -22.0f;
             }
-
-            if ((buffer[0] & 0x20) == 0x20)
-            {
-                // T_A < T_LOWER
-                Console.WriteLine("Numero 3");
-            }
-
-            // The calculation for the temperature is taken from the 25095A.pdf document linked
-            // to in the above class comment.
-            float temperature = 0.0f;
-
-            byte upperv = (byte) (buffer[0] & 0x1F); // Clear flag bits.
-
-            if ((upperv & 0x10) == 0x10) { // Check sign
-                // Negative
-                upperv = (byte) (upperv & 0x0F);
-                temperature = 256.0f - ((float)upperv * 16f + ((float)buffer[1] / 16f));
-            }
-            else
-            {
-                // Positive
-                temperature = (float)upperv * 16f + ((float)buffer[1] / 16f);
-            }
-            return temperature;
         }
     }
 }
