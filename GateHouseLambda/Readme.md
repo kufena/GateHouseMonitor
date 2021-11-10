@@ -1,3 +1,11 @@
+# For this particular function
+
+Use
+
+    dotnet lambda deploy-serverless --template serverless.template
+
+to deploy this function.
+
 # AWS Lambda Empty Function Project
 
 This starter project consists of:

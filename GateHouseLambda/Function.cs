@@ -64,7 +64,7 @@ namespace GateHouseLambda
                 var model = JsonSerializer.Deserialize<GateHouseMonitorModel>(request.Body, jsonopt);
                 Console.WriteLine($"Got ok = {model.OK} and time/date of {model.Time.ToShortTimeString()}-{model.Time.ToShortDateString()}");
 
-                string dtformat = model.Time.ToString("yyyy-M-d-HH-mm-ss");
+                string dtformat = model.Time.ToString("yyyy-MM-dd-HH-mm-ss");
                 Console.WriteLine("Here's the format --" + dtformat + "--");
                 
                 MonitorJson mj = new MonitorJson
