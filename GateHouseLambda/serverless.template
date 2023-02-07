@@ -8,7 +8,7 @@
       "Properties": {
         "Handler": "GateHouseLambda::GateHouseLambda.Function::Post",
         "Runtime": "dotnet6",
-        "CodeUri": "",
+        "CodeUri": "Build",
         "MemorySize": 512,
         "Timeout": 30,
         "Role": null,
