@@ -2,7 +2,7 @@
   "profiles": {
     "GateHouseMonitor": {
       "commandName": "Project",
-      "commandLineArgs": "https://hkyqhsa4kb.execute-api.eu-west-2.amazonaws.com/Prod/GateHouseMonitor hamcrestcloud.com"
+      "commandLineArgs": "https://efsmiqc6v8.execute-api.eu-west-2.amazonaws.com/Prod/GateHouseMonitor hamcrestcloud.com"
     }
   }
 }
