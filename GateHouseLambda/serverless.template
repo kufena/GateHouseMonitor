@@ -7,8 +7,8 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "GateHouseLambda::GateHouseLambda.Function::Post",
-        "Runtime": "dotnet6",
-        "CodeUri": "Build",
+        "Runtime": "dotnet8",
+        "CodeUri": ".\\bin\\Release\\net8.0\\GateHouseLambda.zip",
         "MemorySize": 512,
         "Timeout": 30,
         "Role": null,
